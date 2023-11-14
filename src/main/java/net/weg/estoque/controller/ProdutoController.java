@@ -38,7 +38,7 @@ public class ProdutoController {
           produtoService.deletar(id);
     }
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody Produto produto){
+    public ResponseEntity cadastrar(@RequestBody ProdutoDTO produto){
         try{
            return new ResponseEntity<>( produtoService.cadastrar(produto),HttpStatus.CREATED);
         }catch (Exception e){
@@ -47,9 +47,17 @@ public class ProdutoController {
 
     }
     @PutMapping("{altEstoque}")
-    public ResponseEntity editar(@RequestBody ProdutoDTO produto, @PathVariable (value ="altEstoque")Integer altEstoque){
+    public ResponseEntity editar(@RequestBody Produto produto, @PathVariable (value ="altEstoque")Integer altEstoque){
         try{
-            return new ResponseEntity<>( produtoService.editar(produto,altEstoque),HttpStatus.OK);
+            return new ResponseEntity<>( produtoService.editarEstoque(produto,altEstoque),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping()
+    public ResponseEntity editar(@RequestBody Produto produto){
+        try{
+            return new ResponseEntity<>( produtoService.editar(produto),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

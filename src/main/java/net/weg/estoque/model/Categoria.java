@@ -9,22 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Produto {
+public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String nome;
-    private Double preco;
-    private  Integer estoque;
-    private String data;
     private String descricao;
-    private Long codigoDeBarras;
-    private  Double peso;
-    private  Double medida;
-    @ManyToOne
-    private Fabricante fabricante;
-    private String categoria;
-
-
 }

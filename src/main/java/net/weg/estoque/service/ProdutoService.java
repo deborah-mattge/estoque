@@ -23,32 +23,48 @@ public class ProdutoService {
      public void deletar(Integer id ){
          produtoRepository.deleteById(id);
      }
-     public Produto cadastrar(Produto produto) throws Exception {
+     public Produto cadastrar(ProdutoDTO produto) throws Exception {
         if(produtoRepository.existsByCodigoDeBarras(produto.getCodigoDeBarras())){
             throw  new Exception("Um produto com o código de barra: "+ produto.getCodigoDeBarras() + " já existe");
         }
         else if(produto.getPreco()<0){
             throw new Exception( "Preço não pode ser menor que 0!");
         }
+         Produto produto1 = new Produto();
+         produto1.setEstoque(0);
+         BeanUtils.copyProperties(produto,produto1);
 
-        return produtoRepository.save(produto);
+        return produtoRepository.save(produto1);
      }
 
-    public Produto editar(ProdutoDTO produto, Integer quantAuterarEstoque) throws Exception {
+    public Produto editarEstoque(Produto produto, Integer quantAuterarEstoque) throws Exception {
         if(!produtoRepository.existsByCodigoDeBarras(produto.getCodigoDeBarras())){
             throw  new Exception("Um produto com o código de barra: "+ produto.getCodigoDeBarras() + " não existe");
         }
         else if(produto.getPreco()<0){
             throw new Exception( "Preço não pode ser menor que 0!");
         }
-        Produto produto1 = new Produto();
         Integer estoque = (produtoRepository.findById(produto.getId()).get()).getEstoque();
-        produto1.setEstoque(estoque +quantAuterarEstoque);
-        if(produto1.getEstoque()<0){
+        produto.setEstoque(estoque +quantAuterarEstoque);
+        if(produto.getEstoque()<0){
             throw  new Exception("Estoque insuficiente! ");
         }
-        BeanUtils.copyProperties(produto,produto1);
-        return produtoRepository.save(produto1);
+
+        return produtoRepository.save(produto);
+    }
+
+    public Produto editar(Produto produto) throws Exception {
+        if(!produtoRepository.existsByCodigoDeBarras(produto.getCodigoDeBarras())){
+            throw  new Exception("Um produto com o código de barra: "+ produto.getCodigoDeBarras() + " não existe");
+        }
+        else if(produto.getPreco()<0){
+            throw new Exception( "Preço não pode ser menor que 0!");
+        }
+        if(produto.getEstoque()<0){
+            throw  new Exception("Estoque insuficiente! ");
+        }
+
+        return produtoRepository.save(produto);
     }
 
 
